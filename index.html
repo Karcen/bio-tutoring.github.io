@@ -2,107 +2,582 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>第一次补课 - 20260118</title>
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        :root{--bg:#fff;--bg2:#f5f5f5;--bg3:#e8e8e8;--text:#1a1a1a;--text2:#666;--border:#d0d0d0;--accent:#333}
-        [data-theme="dark"]{--bg:#1a1a1a;--bg2:#252525;--bg3:#333;--text:#f0f0f0;--text2:#999;--border:#444;--accent:#e0e0e0}
-        body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.8;transition:all .3s}
-        .header{background:var(--bg2);border-bottom:2px solid var(--border);padding:20px;position:sticky;top:0;z-index:1000}
-        .header-content{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
-        .logo{font-size:24px;font-weight:bold}
-        .logo span{font-size:14px;color:var(--text2);margin-left:10px}
-        .theme-toggle{background:var(--bg3);border:2px solid var(--border);padding:10px 20px;border-radius:25px;cursor:pointer;font-size:14px;color:var(--text)}
-        .nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:15px 20px;position:sticky;top:70px;z-index:999}
-        .nav-content{max-width:1200px;margin:0 auto;display:flex;gap:10px;flex-wrap:wrap}
-        .nav-btn{background:var(--bg);border:2px solid var(--border);padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;color:var(--text);transition:all .3s}
-        .nav-btn:hover,.nav-btn.active{background:var(--accent);color:var(--bg);border-color:var(--accent)}
-        .container{max-width:1200px;margin:0 auto;padding:30px 20px}
-        .section{display:none}.section.active{display:block}
-        .section-title{font-size:28px;margin-bottom:30px;padding-bottom:15px;border-bottom:3px solid var(--accent)}
-        .card{background:var(--bg2);border:2px solid var(--border);border-radius:12px;margin-bottom:20px;overflow:hidden}
-        .card-header{padding:20px;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;transition:background .3s}
-        .card-header:hover{background:var(--bg3)}
-        .q-num{background:var(--accent);color:var(--bg);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;margin-right:15px;flex-shrink:0}
-        .q-text{flex:1}
-        .toggle{font-size:24px;transition:transform .3s}
-        .card.open .toggle{transform:rotate(180deg)}
-        .card-content{max-height:0;overflow:hidden;transition:max-height .5s}
-        .card.open .card-content{max-height:5000px}
-        .card-body{padding:20px;border-top:1px solid var(--border)}
-        .options{margin:20px 0}
-        .option{padding:15px;margin:10px 0;background:var(--bg);border:2px solid var(--border);border-radius:8px;cursor:pointer;display:flex;align-items:flex-start;transition:all .3s}
-        .option:hover{border-color:var(--accent)}
-        .option.correct{background:#e8f5e9;border-color:#4caf50}
-        .option.wrong{background:#ffebee;border-color:#f44336}
-        [data-theme="dark"] .option.correct{background:#1b3d1b}
-        [data-theme="dark"] .option.wrong{background:#3d1b1b}
-        .opt-letter{width:30px;height:30px;border:2px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-right:15px;font-weight:bold;flex-shrink:0}
-        .analysis{background:var(--bg3);padding:20px;border-radius:8px;margin-top:20px}
-        .analysis-title{font-weight:bold;margin-bottom:15px;font-size:18px}
-        .point{margin:10px 0;padding-left:20px;position:relative}
-        .point::before{content:"•";position:absolute;left:0;color:var(--accent)}
-        .formula{background:var(--bg3);padding:20px;border-radius:8px;margin:15px 0;font-family:monospace;font-size:16px;text-align:center}
-        .highlight{background:var(--accent);color:var(--bg);padding:2px 8px;border-radius:4px}
-        .box{background:var(--bg2);border:2px solid var(--border);border-radius:12px;padding:25px;margin-bottom:30px}
-        .box-title{font-size:22px;margin-bottom:20px;display:flex;align-items:center;gap:10px}
-        .icon{width:40px;height:40px;background:var(--accent);color:var(--bg);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px}
-        .anim-container{background:var(--bg);border:2px solid var(--border);border-radius:12px;padding:20px;margin:20px 0;min-height:200px}
-        .anim-controls{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
-        .anim-btn{background:var(--bg3);border:2px solid var(--border);padding:10px 20px;border-radius:8px;cursor:pointer;font-size:14px;color:var(--text);transition:all .3s}
-        .anim-btn:hover,.anim-btn.active{background:var(--accent);color:var(--bg)}
-        table{width:100%;border-collapse:collapse;margin:20px 0}
-        th,td{padding:15px;border:2px solid var(--border);text-align:left}
-        th{background:var(--accent);color:var(--bg)}
-        tr:nth-child(even){background:var(--bg3)}
-        .info-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin:20px 0}
-        .info-card{background:var(--bg2);border:2px solid var(--border);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .3s}
-        .info-card:hover{border-color:var(--accent);transform:translateY(-3px)}
-        .info-card-title{font-weight:bold;margin-bottom:10px}
-        .info-card-value{font-size:24px;font-weight:bold;color:var(--accent)}
-        .stage-desc{background:var(--bg3);padding:20px;border-radius:8px;margin-top:20px}
-        .stage-title{font-weight:bold;font-size:18px;margin-bottom:10px}
-        .tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:20px}
-        .tab{padding:15px 25px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .3s}
-        .tab:hover{background:var(--bg3)}
-        .tab.active{border-bottom-color:var(--accent);font-weight:bold}
-        .tab-content{display:none}
-        .tab-content.active{display:block}
-        .steps{margin:20px 0}
-        .step{display:flex;margin:15px 0;padding:15px;background:var(--bg);border:2px solid var(--border);border-radius:8px;cursor:pointer;transition:all .3s}
-        .step:hover,.step.active{border-color:var(--accent);background:var(--bg3)}
-        .step-num{width:35px;height:35px;background:var(--accent);color:var(--bg);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;margin-right:15px;flex-shrink:0}
-        .step-content{flex:1}
-        .step-title{font-weight:bold;margin-bottom:5px}
-        .diagram{display:flex;justify-content:space-around;align-items:center;flex-wrap:wrap;gap:20px;padding:30px}
-        .diagram-item{text-align:center;padding:20px;background:var(--bg2);border:2px solid var(--border);border-radius:12px;min-width:150px;cursor:pointer;transition:all .3s}
-        .diagram-item:hover{transform:translateY(-5px);border-color:var(--accent)}
-        .diagram-icon{font-size:40px;margin-bottom:10px}
-        .diagram-arrow{font-size:30px;color:var(--text2)}
-        .rate-display{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin:20px 0}
-        .rate-box{background:var(--bg2);border:2px solid var(--border);border-radius:12px;padding:20px 30px;text-align:center;min-width:150px}
-        .rate-value{font-size:36px;font-weight:bold;margin:10px 0}
-        .rate-unit{color:var(--text2);font-size:14px}
-        .slider-control{margin:20px 0}
-        .slider-label{display:flex;justify-content:space-between;margin-bottom:10px}
-        .slider{width:100%;height:10px;-webkit-appearance:none;background:var(--bg3);border-radius:5px;outline:none}
-        .slider::-webkit-slider-thumb{-webkit-appearance:none;width:25px;height:25px;background:var(--accent);border-radius:50%;cursor:pointer}
-        .progress-bar{height:10px;background:var(--bg3);border-radius:5px;overflow:hidden}
-        .progress-fill{height:100%;background:var(--accent);transition:width .5s}
-        .progress-label{display:flex;justify-content:space-between;margin-top:5px;font-size:12px;color:var(--text2)}
-        .chr-count{display:inline-flex;align-items:center;gap:5px;background:var(--bg3);padding:8px 15px;border-radius:20px;font-size:14px;margin:5px}
-        .count-label{color:var(--text2)}
-        .count-value{font-weight:bold}
-        .drag-area{display:flex;gap:10px;flex-wrap:wrap;min-height:80px;padding:15px;background:var(--bg3);border-radius:8px;margin:15px 0}
-        .drag-item{padding:10px 20px;background:var(--bg);border:2px solid var(--border);border-radius:8px;cursor:grab;user-select:none}
-        .drag-item:active{cursor:grabbing}
-        .footer{background:var(--bg2);border-top:2px solid var(--border);padding:30px 20px;text-align:center;margin-top:50px}
-        .footer-text{color:var(--text2)}
-        @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-        .pulse{animation:pulse 2s infinite}
-        svg text{fill:var(--text)}
-    </style>
+        * {
+	margin:0;
+	padding:0;
+	box-sizing:border-box
+}
+:root {
+	--bg:#fff;
+	--bg2:#f5f5f5;
+	--bg3:#e8e8e8;
+	--text:#1a1a1a;
+	--text2:#666;
+	--border:#d0d0d0;
+	--accent:#333
+}
+[data-theme="dark"] {
+	--bg:#1a1a1a;
+	--bg2:#252525;
+	--bg3:#333;
+	--text:#f0f0f0;
+	--text2:#999;
+	--border:#444;
+	--accent:#e0e0e0
+}
+body {
+	font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+	background:var(--bg);
+	color:var(--text);
+	line-height:1.8;
+	transition:all .3s
+}
+.header {
+	background:var(--bg2);
+	border-bottom:2px solid var(--border);
+	padding:20px;
+	position:sticky;
+	top:0;
+	z-index:1000
+}
+.header-content {
+	max-width:1200px;
+	margin:0 auto;
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+	flex-wrap:wrap;
+	gap:15px
+}
+.logo {
+	font-size:24px;
+	font-weight:bold
+}
+.logo span {
+	font-size:14px;
+	color:var(--text2);
+	margin-left:10px
+}
+.theme-toggle {
+	background:var(--bg3);
+	border:2px solid var(--border);
+	padding:10px 20px;
+	border-radius:25px;
+	cursor:pointer;
+	font-size:14px;
+	color:var(--text)
+}
+.nav {
+	background:var(--bg2);
+	border-bottom:1px solid var(--border);
+	padding:15px 20px;
+	position:sticky;
+	top:70px;
+	z-index:999
+}
+.nav-content {
+	max-width:1200px;
+	margin:0 auto;
+	display:flex;
+	gap:10px;
+	flex-wrap:wrap
+}
+.nav-btn {
+	background:var(--bg);
+	border:2px solid var(--border);
+	padding:10px 20px;
+	border-radius:8px;
+	cursor:pointer;
+	font-size:14px;
+	color:var(--text);
+	transition:all .3s
+}
+.nav-btn:hover,.nav-btn.active {
+	background:var(--accent);
+	color:var(--bg);
+	border-color:var(--accent)
+}
+.container {
+	max-width:1200px;
+	margin:0 auto;
+	padding:30px 20px
+}
+.section {
+	display:none
+}
+.section.active {
+	display:block
+}
+.section-title {
+	font-size:28px;
+	margin-bottom:30px;
+	padding-bottom:15px;
+	border-bottom:3px solid var(--accent)
+}
+.card {
+	background:var(--bg2);
+	border:2px solid var(--border);
+	border-radius:12px;
+	margin-bottom:20px;
+	overflow:hidden
+}
+.card-header {
+	padding:20px;
+	cursor:pointer;
+	display:flex;
+	justify-content:space-between;
+	align-items:flex-start;
+	transition:background .3s
+}
+.card-header:hover {
+	background:var(--bg3)
+}
+.q-num {
+	background:var(--accent);
+	color:var(--bg);
+	width:40px;
+	height:40px;
+	border-radius:50%;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	font-weight:bold;
+	margin-right:15px;
+	flex-shrink:0
+}
+.q-text {
+	flex:1
+}
+.toggle {
+	font-size:24px;
+	transition:transform .3s
+}
+.card.open .toggle {
+	transform:rotate(180deg)
+}
+.card-content {
+	max-height:0;
+	overflow:hidden;
+	transition:max-height .5s
+}
+.card.open .card-content {
+	max-height:5000px
+}
+.card-body {
+	padding:20px;
+	border-top:1px solid var(--border)
+}
+.options {
+	margin:20px 0
+}
+.option {
+	padding:15px;
+	margin:10px 0;
+	background:var(--bg);
+	border:2px solid var(--border);
+	border-radius:8px;
+	cursor:pointer;
+	display:flex;
+	align-items:flex-start;
+	transition:all .3s
+}
+.option:hover {
+	border-color:var(--accent)
+}
+.option.correct {
+	background:#e8f5e9;
+	border-color:#4caf50
+}
+.option.wrong {
+	background:#ffebee;
+	border-color:#f44336
+}
+[data-theme="dark"] .option.correct {
+	background:#1b3d1b
+}
+[data-theme="dark"] .option.wrong {
+	background:#3d1b1b
+}
+.opt-letter {
+	width:30px;
+	height:30px;
+	border:2px solid var(--border);
+	border-radius:50%;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	margin-right:15px;
+	font-weight:bold;
+	flex-shrink:0
+}
+.analysis {
+	background:var(--bg3);
+	padding:20px;
+	border-radius:8px;
+	margin-top:20px
+}
+.analysis-title {
+	font-weight:bold;
+	margin-bottom:15px;
+	font-size:18px
+}
+.point {
+	margin:10px 0;
+	padding-left:20px;
+	position:relative
+}
+.point::before {
+	content:"•";
+	position:absolute;
+	left:0;
+	color:var(--accent)
+}
+.formula {
+	background:var(--bg3);
+	padding:20px;
+	border-radius:8px;
+	margin:15px 0;
+	font-family:monospace;
+	font-size:16px;
+	text-align:center
+}
+.highlight {
+	background:var(--accent);
+	color:var(--bg);
+	padding:2px 8px;
+	border-radius:4px
+}
+.box {
+	background:var(--bg2);
+	border:2px solid var(--border);
+	border-radius:12px;
+	padding:25px;
+	margin-bottom:30px
+}
+.box-title {
+	font-size:22px;
+	margin-bottom:20px;
+	display:flex;
+	align-items:center;
+	gap:10px
+}
+.icon {
+	width:40px;
+	height:40px;
+	background:var(--accent);
+	color:var(--bg);
+	border-radius:8px;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	font-size:20px
+}
+.anim-container {
+	background:var(--bg);
+	border:2px solid var(--border);
+	border-radius:12px;
+	padding:20px;
+	margin:20px 0;
+	min-height:200px
+}
+.anim-controls {
+	display:flex;
+	gap:10px;
+	margin-bottom:20px;
+	flex-wrap:wrap
+}
+.anim-btn {
+	background:var(--bg3);
+	border:2px solid var(--border);
+	padding:10px 20px;
+	border-radius:8px;
+	cursor:pointer;
+	font-size:14px;
+	color:var(--text);
+	transition:all .3s
+}
+.anim-btn:hover,.anim-btn.active {
+	background:var(--accent);
+	color:var(--bg)
+}
+table {
+	width:100%;
+	border-collapse:collapse;
+	margin:20px 0
+}
+th,td {
+	padding:15px;
+	border:2px solid var(--border);
+	text-align:left
+}
+th {
+	background:var(--accent);
+	color:var(--bg)
+}
+tr:nth-child(even) {
+	background:var(--bg3)
+}
+.info-cards {
+	display:grid;
+	grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+	gap:15px;
+	margin:20px 0
+}
+.info-card {
+	background:var(--bg2);
+	border:2px solid var(--border);
+	border-radius:12px;
+	padding:20px;
+	text-align:center;
+	cursor:pointer;
+	transition:all .3s
+}
+.info-card:hover {
+	border-color:var(--accent);
+	transform:translateY(-3px)
+}
+.info-card-title {
+	font-weight:bold;
+	margin-bottom:10px
+}
+.info-card-value {
+	font-size:24px;
+	font-weight:bold;
+	color:var(--accent)
+}
+.stage-desc {
+	background:var(--bg3);
+	padding:20px;
+	border-radius:8px;
+	margin-top:20px
+}
+.stage-title {
+	font-weight:bold;
+	font-size:18px;
+	margin-bottom:10px
+}
+.tabs {
+	display:flex;
+	border-bottom:2px solid var(--border);
+	margin-bottom:20px
+}
+.tab {
+	padding:15px 25px;
+	cursor:pointer;
+	border-bottom:3px solid transparent;
+	margin-bottom:-2px;
+	transition:all .3s
+}
+.tab:hover {
+	background:var(--bg3)
+}
+.tab.active {
+	border-bottom-color:var(--accent);
+	font-weight:bold
+}
+.tab-content {
+	display:none
+}
+.tab-content.active {
+	display:block
+}
+.steps {
+	margin:20px 0
+}
+.step {
+	display:flex;
+	margin:15px 0;
+	padding:15px;
+	background:var(--bg);
+	border:2px solid var(--border);
+	border-radius:8px;
+	cursor:pointer;
+	transition:all .3s
+}
+.step:hover,.step.active {
+	border-color:var(--accent);
+	background:var(--bg3)
+}
+.step-num {
+	width:35px;
+	height:35px;
+	background:var(--accent);
+	color:var(--bg);
+	border-radius:50%;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	font-weight:bold;
+	margin-right:15px;
+	flex-shrink:0
+}
+.step-content {
+	flex:1
+}
+.step-title {
+	font-weight:bold;
+	margin-bottom:5px
+}
+.diagram {
+	display:flex;
+	justify-content:space-around;
+	align-items:center;
+	flex-wrap:wrap;
+	gap:20px;
+	padding:30px
+}
+.diagram-item {
+	text-align:center;
+	padding:20px;
+	background:var(--bg2);
+	border:2px solid var(--border);
+	border-radius:12px;
+	min-width:150px;
+	cursor:pointer;
+	transition:all .3s
+}
+.diagram-item:hover {
+	transform:translateY(-5px);
+	border-color:var(--accent)
+}
+.diagram-icon {
+	font-size:40px;
+	margin-bottom:10px
+}
+.diagram-arrow {
+	font-size:30px;
+	color:var(--text2)
+}
+.rate-display {
+	display:flex;
+	gap:20px;
+	justify-content:center;
+	flex-wrap:wrap;
+	margin:20px 0
+}
+.rate-box {
+	background:var(--bg2);
+	border:2px solid var(--border);
+	border-radius:12px;
+	padding:20px 30px;
+	text-align:center;
+	min-width:150px
+}
+.rate-value {
+	font-size:36px;
+	font-weight:bold;
+	margin:10px 0
+}
+.rate-unit {
+	color:var(--text2);
+	font-size:14px
+}
+.slider-control {
+	margin:20px 0
+}
+.slider-label {
+	display:flex;
+	justify-content:space-between;
+	margin-bottom:10px
+}
+.slider {
+	width:100%;
+	height:10px;
+	-webkit-appearance:none;
+	background:var(--bg3);
+	border-radius:5px;
+	outline:none
+}
+.slider::-webkit-slider-thumb {
+	-webkit-appearance:none;
+	width:25px;
+	height:25px;
+	background:var(--accent);
+	border-radius:50%;
+	cursor:pointer
+}
+.progress-bar {
+	height:10px;
+	background:var(--bg3);
+	border-radius:5px;
+	overflow:hidden
+}
+.progress-fill {
+	height:100%;
+	background:var(--accent);
+	transition:width .5s
+}
+.progress-label {
+	display:flex;
+	justify-content:space-between;
+	margin-top:5px;
+	font-size:12px;
+	color:var(--text2)
+}
+.chr-count {
+	display:inline-flex;
+	align-items:center;
+	gap:5px;
+	background:var(--bg3);
+	padding:8px 15px;
+	border-radius:20px;
+	font-size:14px;
+	margin:5px
+}
+.count-label {
+	color:var(--text2)
+}
+.count-value {
+	font-weight:bold
+}
+.drag-area {
+	display:flex;
+	gap:10px;
+	flex-wrap:wrap;
+	min-height:80px;
+	padding:15px;
+	background:var(--bg3);
+	border-radius:8px;
+	margin:15px 0
+}
+.drag-item {
+	padding:10px 20px;
+	background:var(--bg);
+	border:2px solid var(--border);
+	border-radius:8px;
+	cursor:grab;
+	user-select:none
+}
+.drag-item:active {
+	cursor:grabbing
+}
+.footer {
+	background:var(--bg2);
+	border-top:2px solid var(--border);
+	padding:30px 20px;
+	text-align:center;
+	margin-top:50px
+}
+.footer-text {
+	color:var(--text2)
+}
+@keyframes pulse {
+	0%,100% {
+	transform:scale(1)
+}
+50% {
+	transform:scale(1.1)
+}
+}.pulse {
+	animation:pulse 2s infinite
+}
+svg text {
+	fill:var(--text)
+}
+</style>
 </head>
 <body>
     <header class="header">
@@ -125,7 +600,9 @@
             
             <div class="card" id="q8">
                 <div class="card-header" onclick="toggleCard('q8')">
-                    <div style="display:flex;align-items:flex-start;"><div class="q-num">8</div><div class="q-text"><strong>（2024 湖南期末）</strong>将紫色洋葱鳞片叶外表皮置于 0.3 g/mL 的乙二醇溶液中，细胞质壁分离程度随时间变化。P点为分离程度最大的点。</div></div>
+                    <div style="display:flex;
+	align-items:flex-start;
+	"><div class="q-num">8</div><div class="q-text"><strong>（2024 湖南期末）</strong>将紫色洋葱鳞片叶外表皮置于 0.3 g/mL 的乙二醇溶液中，细胞质壁分离程度随时间变化。P点为分离程度最大的点。</div></div>
                     <span class="toggle">▼</span>
                 </div>
                 <div class="card-content"><div class="card-body">
@@ -147,7 +624,9 @@
 
             <div class="card" id="q9">
                 <div class="card-header" onclick="toggleCard('q9')">
-                    <div style="display:flex;align-items:flex-start;"><div class="q-num">9</div><div class="q-text"><strong>（2025 合肥期末）</strong>蓝莓储藏实验，测定CO₂释放量和O₂吸收量的比值。</div></div>
+                    <div style="display:flex;
+	align-items:flex-start;
+	"><div class="q-num">9</div><div class="q-text"><strong>（2025 合肥期末）</strong>蓝莓储藏实验，测定CO₂释放量和O₂吸收量的比值。</div></div>
                     <span class="toggle">▼</span>
                 </div>
                 <div class="card-content"><div class="card-body">
@@ -169,7 +648,9 @@
 
             <div class="card" id="q10">
                 <div class="card-header" onclick="toggleCard('q10')">
-                    <div style="display:flex;align-items:flex-start;"><div class="q-num">10</div><div class="q-text"><strong>（2024 山东菏泽期末）</strong>密闭透明小室内氧气变化量，一昼夜光合作用曲线分析。</div></div>
+                    <div style="display:flex;
+	align-items:flex-start;
+	"><div class="q-num">10</div><div class="q-text"><strong>（2024 山东菏泽期末）</strong>密闭透明小室内氧气变化量，一昼夜光合作用曲线分析。</div></div>
                     <span class="toggle">▼</span>
                 </div>
                 <div class="card-content"><div class="card-body">
@@ -191,7 +672,9 @@
 
             <div class="card" id="q11">
                 <div class="card-header" onclick="toggleCard('q11')">
-                    <div style="display:flex;align-items:flex-start;"><div class="q-num">11</div><div class="q-text"><strong>（2024 江苏淮安期末）</strong>某二倍体动物(2N)细胞有丝分裂过程中染色体数、染色单体数和核DNA分子数变化。</div></div>
+                    <div style="display:flex;
+	align-items:flex-start;
+	"><div class="q-num">11</div><div class="q-text"><strong>（2024 江苏淮安期末）</strong>某二倍体动物(2N)细胞有丝分裂过程中染色体数、染色单体数和核DNA分子数变化。</div></div>
                     <span class="toggle">▼</span>
                 </div>
                 <div class="card-content"><div class="card-body">
@@ -211,7 +694,9 @@
 
             <div class="card" id="q12">
                 <div class="card-header" onclick="toggleCard('q12')">
-                    <div style="display:flex;align-items:flex-start;"><div class="q-num">12</div><div class="q-text"><strong>（24-25 山东济宁期末）</strong>³²P标记研究蚕豆根尖细胞分裂情况。</div></div>
+                    <div style="display:flex;
+	align-items:flex-start;
+	"><div class="q-num">12</div><div class="q-text"><strong>（24-25 山东济宁期末）</strong>³²P标记研究蚕豆根尖细胞分裂情况。</div></div>
                     <span class="toggle">▼</span>
                 </div>
                 <div class="card-content"><div class="card-body">
@@ -236,7 +721,9 @@
 
             <div class="card" id="q7">
                 <div class="card-header" onclick="toggleCard('q7')">
-                    <div style="display:flex;align-items:flex-start;"><div class="q-num">7</div><div class="q-text"><strong>细胞周期同步化</strong>：某化学物质能阻断DNA复制，培养14h后细胞群体同步在？</div></div>
+                    <div style="display:flex;
+	align-items:flex-start;
+	"><div class="q-num">7</div><div class="q-text"><strong>细胞周期同步化</strong>：某化学物质能阻断DNA复制，培养14h后细胞群体同步在？</div></div>
                     <span class="toggle">▼</span>
                 </div>
                 <div class="card-content"><div class="card-body">
@@ -263,7 +750,9 @@
 
             <div class="card" id="q8b">
                 <div class="card-header" onclick="toggleCard('q8b')">
-                    <div style="display:flex;align-items:flex-start;"><div class="q-num">8</div><div class="q-text"><strong>光合作用速率测定</strong>：叶绿体光合作用速率=(2y-z-x)/6，则M处实验条件是？</div></div>
+                    <div style="display:flex;
+	align-items:flex-start;
+	"><div class="q-num">8</div><div class="q-text"><strong>光合作用速率测定</strong>：叶绿体光合作用速率=(2y-z-x)/6，则M处实验条件是？</div></div>
                     <span class="toggle">▼</span>
                 </div>
                 <div class="card-content"><div class="card-body">
@@ -283,7 +772,9 @@
 
             <div class="card" id="q13">
                 <div class="card-header" onclick="toggleCard('q13')">
-                    <div style="display:flex;align-items:flex-start;"><div class="q-num">13</div><div class="q-text"><strong>减数分裂计算</strong>：精原细胞形成4个四分体，减数第二次分裂中期染色体、染色单体和核DNA数？</div></div>
+                    <div style="display:flex;
+	align-items:flex-start;
+	"><div class="q-num">13</div><div class="q-text"><strong>减数分裂计算</strong>：精原细胞形成4个四分体，减数第二次分裂中期染色体、染色单体和核DNA数？</div></div>
                     <span class="toggle">▼</span>
                 </div>
                 <div class="card-content"><div class="card-body">
@@ -307,7 +798,9 @@
 
             <div class="card" id="q14">
                 <div class="card-header" onclick="toggleCard('q14')">
-                    <div style="display:flex;align-items:flex-start;"><div class="q-num">14</div><div class="q-text"><strong>蛋白质计算</strong>：角蛋白由两条多肽链组成，共312个氨基酸。</div></div>
+                    <div style="display:flex;
+	align-items:flex-start;
+	"><div class="q-num">14</div><div class="q-text"><strong>蛋白质计算</strong>：角蛋白由两条多肽链组成，共312个氨基酸。</div></div>
                     <span class="toggle">▼</span>
                 </div>
                 <div class="card-content"><div class="card-body">
@@ -349,13 +842,16 @@
                     <button class="anim-btn" onclick="showMeiosis('telophase2',this)">末期II</button>
                 </div>
                 <div class="anim-container">
-                    <svg viewBox="0 0 500 200" id="meiosisSvg" style="width:100%;height:200px;"></svg>
+                    <svg viewBox="0 0 500 200" id="meiosisSvg" style="width:100%;
+	height:200px;
+	"></svg>
                 </div>
                 <div class="stage-desc" id="meiosisDesc">
                     <div class="stage-title">间期（DNA复制期）</div>
                     <p>DNA复制，染色体数目不变，每条染色体由1个DNA变成2个DNA（形成姐妹染色单体）</p>
                 </div>
-                <div style="margin-top:15px;">
+                <div style="margin-top:15px;
+	">
                     <div class="chr-count"><span class="count-label">染色体：</span><span class="count-value" id="chrCount">2n=4</span></div>
                     <div class="chr-count"><span class="count-label">DNA：</span><span class="count-value" id="dnaCount">4n=8</span></div>
                     <div class="chr-count"><span class="count-label">染色单体：</span><span class="count-value" id="chromatidCount">8</span></div>
@@ -381,19 +877,22 @@
                     <div class="diagram-item" onclick="showFert('sperm')">
                         <div class="diagram-icon">🔵</div>
                         <div><strong>精子 (n)</strong></div>
-                        <div style="font-size:12px;color:var(--text2)">单倍体</div>
+                        <div style="font-size:12px;
+	color:var(--text2)">单倍体</div>
                     </div>
                     <div class="diagram-arrow">+</div>
                     <div class="diagram-item" onclick="showFert('egg')">
                         <div class="diagram-icon">⭕</div>
                         <div><strong>卵细胞 (n)</strong></div>
-                        <div style="font-size:12px;color:var(--text2)">单倍体</div>
+                        <div style="font-size:12px;
+	color:var(--text2)">单倍体</div>
                     </div>
                     <div class="diagram-arrow">→</div>
                     <div class="diagram-item" onclick="showFert('zygote')">
                         <div class="diagram-icon">🟢</div>
                         <div><strong>受精卵 (2n)</strong></div>
-                        <div style="font-size:12px;color:var(--text2)">二倍体</div>
+                        <div style="font-size:12px;
+	color:var(--text2)">二倍体</div>
                     </div>
                 </div>
                 <div class="stage-desc" id="fertDetail">
@@ -414,13 +913,21 @@
                     <div class="drag-item" draggable="true" data-stage="末期II">末期II</div>
                     <div class="drag-item" draggable="true" data-stage="前期I">前期I</div>
                 </div>
-                <div style="margin:15px 0;font-weight:bold;">正确顺序：</div>
-                <div class="drag-area" id="dragTarget" style="border:3px dashed var(--border);"></div>
-                <div style="margin-top:15px;">
+                <div style="margin:15px 0;
+	font-weight:bold;
+	">正确顺序：</div>
+                <div class="drag-area" id="dragTarget" style="border:3px dashed var(--border);
+	"></div>
+                <div style="margin-top:15px;
+	">
                     <button class="anim-btn" onclick="checkDrag()">检查答案</button>
                     <button class="anim-btn" onclick="resetDrag()">重置</button>
                 </div>
-                <div id="dragResult" style="margin-top:15px;padding:15px;border-radius:8px;display:none;"></div>
+                <div id="dragResult" style="margin-top:15px;
+	padding:15px;
+	border-radius:8px;
+	display:none;
+	"></div>
             </div>
         </section>
 
@@ -512,11 +1019,24 @@
             <div class="box">
                 <div class="box-title"><span class="icon">⚡</span>核心概念：真光合 vs 净光合</div>
                 <div class="diagram">
-                    <div class="diagram-item" style="background:var(--bg3);"><div style="font-size:20px;font-weight:bold;">真光合速率</div><div style="font-size:14px;margin-top:10px;">光合作用实际制造的有机物量</div></div>
+                    <div class="diagram-item" style="background:var(--bg3);
+	"><div style="font-size:20px;
+	font-weight:bold;
+	">真光合速率</div><div style="font-size:14px;
+	margin-top:10px;
+	">光合作用实际制造的有机物量</div></div>
                     <div class="diagram-arrow">=</div>
-                    <div class="diagram-item"><div style="font-size:20px;font-weight:bold;">净光合速率</div><div style="font-size:14px;margin-top:10px;">光合作用积累的有机物量</div></div>
+                    <div class="diagram-item"><div style="font-size:20px;
+	font-weight:bold;
+	">净光合速率</div><div style="font-size:14px;
+	margin-top:10px;
+	">光合作用积累的有机物量</div></div>
                     <div class="diagram-arrow">+</div>
-                    <div class="diagram-item"><div style="font-size:20px;font-weight:bold;">呼吸速率</div><div style="font-size:14px;margin-top:10px;">呼吸作用消耗的有机物量</div></div>
+                    <div class="diagram-item"><div style="font-size:20px;
+	font-weight:bold;
+	">呼吸速率</div><div style="font-size:14px;
+	margin-top:10px;
+	">呼吸作用消耗的有机物量</div></div>
                 </div>
                 <div class="formula"><span class="highlight">真光合速率 = 净光合速率 + 呼吸速率</span><br><br><strong>测定方法：</strong><br>• 净光合速率：光照下测定的O₂释放量或CO₂吸收量<br>• 呼吸速率：黑暗中测定的O₂消耗量或CO₂释放量</div>
             </div>
@@ -524,7 +1044,9 @@
             <div class="box">
                 <div class="box-title"><span class="icon">☀️</span>光补偿点与光饱和点</div>
                 <div class="anim-container">
-                    <svg viewBox="0 0 500 250" style="width:100%;height:250px;">
+                    <svg viewBox="0 0 500 250" style="width:100%;
+	height:250px;
+	">
                         <line x1="60" y1="200" x2="450" y2="200" stroke="currentColor" stroke-width="2"/>
                         <line x1="60" y1="200" x2="60" y2="30" stroke="currentColor" stroke-width="2"/>
                         <line x1="60" y1="140" x2="450" y2="140" stroke="currentColor" stroke-width="1" stroke-dasharray="5,5"/>
@@ -542,8 +1064,10 @@
                     </svg>
                 </div>
                 <div class="info-cards">
-                    <div class="info-card"><div class="info-card-title">光补偿点</div><div class="info-card-value">P = R</div><div>光合速率 = 呼吸速率</div><div style="font-size:12px;color:var(--text2)">净光合 = 0</div></div>
-                    <div class="info-card"><div class="info-card-title">光饱和点</div><div class="info-card-value">P = Max</div><div>光合速率达到最大</div><div style="font-size:12px;color:var(--text2)">再增加光照无效</div></div>
+                    <div class="info-card"><div class="info-card-title">光补偿点</div><div class="info-card-value">P = R</div><div>光合速率 = 呼吸速率</div><div style="font-size:12px;
+	color:var(--text2)">净光合 = 0</div></div>
+                    <div class="info-card"><div class="info-card-title">光饱和点</div><div class="info-card-value">P = Max</div><div>光合速率达到最大</div><div style="font-size:12px;
+	color:var(--text2)">再增加光照无效</div></div>
                 </div>
                 <div class="stage-desc">
                     <div class="stage-title">💡 影响因素</div>
@@ -571,14 +1095,17 @@
                     <div class="rate-box"><div>呼吸速率</div><div class="rate-value" id="respRate">5</div><div class="rate-unit">mg/h</div></div>
                     <div class="rate-box"><div>净光合速率</div><div class="rate-value" id="netPhotoRate">10</div><div class="rate-unit">mg/h</div></div>
                 </div>
-                <div class="progress-bar"><div class="progress-fill" id="organicProgress" style="width:60%;"></div></div>
+                <div class="progress-bar"><div class="progress-fill" id="organicProgress" style="width:60%;
+	"></div></div>
                 <div class="progress-label"><span>消耗</span><span id="organicStatus">积累中 ↑</span><span>积累</span></div>
             </div>
 
             <div class="box">
                 <div class="box-title"><span class="icon">📈</span>一天中光合作用的变化（午休现象）</div>
                 <div class="anim-container">
-                    <svg viewBox="0 0 500 220" style="width:100%;height:220px;">
+                    <svg viewBox="0 0 500 220" style="width:100%;
+	height:220px;
+	">
                         <line x1="50" y1="180" x2="470" y2="180" stroke="currentColor" stroke-width="2"/>
                         <line x1="50" y1="180" x2="50" y2="30" stroke="currentColor" stroke-width="2"/>
                         <text x="50" y="200" font-size="10">0</text>
@@ -605,10 +1132,14 @@
             <div class="box">
                 <div class="box-title"><span class="icon">📝</span>重要公式总结</div>
                 <div class="info-cards">
-                    <div class="info-card"><div class="info-card-title">真光合速率</div><div style="font-size:14px;">净光合 + 呼吸</div></div>
-                    <div class="info-card"><div class="info-card-title">净光合速率</div><div style="font-size:14px;">真光合 - 呼吸</div></div>
-                    <div class="info-card"><div class="info-card-title">O₂净释放量</div><div style="font-size:14px;">光合产O₂ - 呼吸耗O₂</div></div>
-                    <div class="info-card"><div class="info-card-title">有机物积累量</div><div style="font-size:14px;">光合制造 - 呼吸消耗</div></div>
+                    <div class="info-card"><div class="info-card-title">真光合速率</div><div style="font-size:14px;
+	">净光合 + 呼吸</div></div>
+                    <div class="info-card"><div class="info-card-title">净光合速率</div><div style="font-size:14px;
+	">真光合 - 呼吸</div></div>
+                    <div class="info-card"><div class="info-card-title">O₂净释放量</div><div style="font-size:14px;
+	">光合产O₂ - 呼吸耗O₂</div></div>
+                    <div class="info-card"><div class="info-card-title">有机物积累量</div><div style="font-size:14px;
+	">光合制造 - 呼吸消耗</div></div>
                 </div>
             </div>
         </section>
@@ -617,212 +1148,232 @@
     <script>
         // Theme Toggle
         function toggleTheme() {
-            const body = document.body;
-            const btn = document.querySelector('.theme-toggle');
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.removeAttribute('data-theme');
-                btn.textContent = '🌙 切换暗色模式';
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                btn.textContent = '☀️ 切换亮色模式';
-            }
-        }
-
-        // Section Navigation
+	const body = document.body;
+	const btn = document.querySelector('.theme-toggle');
+	if (body.getAttribute('data-theme') === 'dark') {
+	body.removeAttribute('data-theme');
+	btn.textContent = '🌙 切换暗色模式';
+}
+else {
+	body.setAttribute('data-theme','dark');
+	btn.textContent = '☀️ 切换亮色模式';
+}
+}// Section Navigation
         function showSection(sectionId) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-            event.target.classList.add('active');
-        }
-
-        // Question Card Toggle
+	document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+	document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+	document.getElementById(sectionId).classList.add('active');
+	event.target.classList.add('active');
+}
+// Question Card Toggle
         function toggleCard(id) {
-            document.getElementById(id).classList.toggle('open');
-        }
-
-        // Option Selection
-        function selectOpt(el, isCorrect) {
-            const options = el.parentElement.querySelectorAll('.option');
-            options.forEach(opt => opt.classList.remove('correct', 'wrong'));
-            el.classList.add(isCorrect ? 'correct' : 'wrong');
-            if (!isCorrect) {
-                options.forEach(opt => {
-                    if (opt.onclick.toString().includes('true')) opt.classList.add('correct');
-                });
-            }
-        }
-
-        // Meiosis Data
+	document.getElementById(id).classList.toggle('open');
+}
+// Option Selection
+        function selectOpt(el,isCorrect) {
+	const options = el.parentElement.querySelectorAll('.option');
+	options.forEach(opt => opt.classList.remove('correct','wrong'));
+	el.classList.add(isCorrect ? 'correct':'wrong');
+	if (!isCorrect) {
+	options.forEach(opt => {
+	if (opt.onclick.toString().includes('true')) opt.classList.add('correct');
+}
+);}}// Meiosis Data
         const meiosisData = {
-            'interphase': { title: '间期（DNA复制期）', desc: 'DNA复制，染色体数目不变，每条染色体形成姐妹染色单体', chr: '2n=4', dna: '4n=8', chromatid: '8' },
-            'prophase1': { title: '前期I（联会、四分体）', desc: '同源染色体配对（联会），形成四分体，可能发生交叉互换', chr: '2n=4', dna: '4n=8', chromatid: '8' },
-            'metaphase1': { title: '中期I', desc: '四分体排列在赤道板上', chr: '2n=4', dna: '4n=8', chromatid: '8' },
-            'anaphase1': { title: '后期I（关键！同源染色体分离）', desc: '同源染色体分离，分别移向细胞两极', chr: '2n=4', dna: '4n=8', chromatid: '8' },
-            'telophase1': { title: '末期I', desc: '形成两个子细胞，每个含n条染色体', chr: 'n=2', dna: '2n=4', chromatid: '4' },
-            'prophase2': { title: '前期II', desc: '与有丝分裂前期类似，注意：没有DNA复制！', chr: 'n=2', dna: '2n=4', chromatid: '4' },
-            'anaphase2': { title: '后期II（姐妹染色单体分离）', desc: '着丝点分裂，姐妹染色单体分开', chr: '2n=4', dna: '2n=4', chromatid: '0' },
-            'telophase2': { title: '末期II', desc: '形成4个子细胞，每个含n条染色体', chr: 'n=2', dna: 'n=2', chromatid: '0' }
-        };
-
-        function showMeiosis(stage, btn) {
-            const data = meiosisData[stage];
-            document.getElementById('meiosisDesc').querySelector('.stage-title').textContent = data.title;
-            document.getElementById('meiosisDesc').querySelector('p').textContent = data.desc;
-            document.getElementById('chrCount').textContent = data.chr;
-            document.getElementById('dnaCount').textContent = data.dna;
-            document.getElementById('chromatidCount').textContent = data.chromatid;
-            document.querySelectorAll('.anim-controls .anim-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            drawMeiosis(stage);
-        }
-
-        function drawMeiosis(stage) {
-            const svg = document.getElementById('meiosisSvg');
-            let html = '';
-            switch(stage) {
-                case 'interphase':
-                    html = '<circle cx="250" cy="100" r="80" fill="var(--bg2)" stroke="currentColor" stroke-width="3"/><circle cx="250" cy="100" r="25" fill="var(--bg3)" stroke="currentColor" stroke-width="2"/><text x="250" y="105" text-anchor="middle" font-size="10">核</text><line x1="220" y1="70" x2="235" y2="90" stroke="currentColor" stroke-width="4"/><line x1="260" y1="70" x2="275" y2="90" stroke="currentColor" stroke-width="4"/><line x1="220" y1="110" x2="235" y2="130" stroke="var(--text2)" stroke-width="4"/><line x1="260" y1="110" x2="275" y2="130" stroke="var(--text2)" stroke-width="4"/>';
-                    break;
-                case 'prophase1':
-                    html = '<circle cx="250" cy="100" r="80" fill="var(--bg2)" stroke="currentColor" stroke-width="3"/><g transform="translate(200,60)"><rect x="0" y="0" width="6" height="40" fill="currentColor"/><rect x="10" y="0" width="6" height="40" fill="currentColor"/><rect x="20" y="0" width="6" height="40" fill="var(--text2)"/><rect x="30" y="0" width="6" height="40" fill="var(--text2)"/></g><g transform="translate(250,90)"><rect x="0" y="0" width="6" height="40" fill="currentColor"/><rect x="10" y="0" width="6" height="40" fill="currentColor"/><rect x="20" y="0" width="6" height="40" fill="var(--text2)"/><rect x="30" y="0" width="6" height="40" fill="var(--text2)"/></g><text x="250" y="180" text-anchor="middle" font-size="12">四分体形成</text>';
-                    break;
-                case 'anaphase1':
-                    html = '<ellipse cx="250" cy="100" rx="120" ry="80" fill="var(--bg2)" stroke="currentColor" stroke-width="3"/><g transform="translate(140,70)"><rect x="0" y="0" width="5" height="30" fill="currentColor"/><rect x="10" y="0" width="5" height="30" fill="currentColor"/></g><g transform="translate(140,100)"><rect x="0" y="0" width="5" height="30" fill="currentColor"/><rect x="10" y="0" width="5" height="30" fill="currentColor"/></g><g transform="translate(330,70)"><rect x="0" y="0" width="5" height="30" fill="var(--text2)"/><rect x="10" y="0" width="5" height="30" fill="var(--text2)"/></g><g transform="translate(330,100)"><rect x="0" y="0" width="5" height="30" fill="var(--text2)"/><rect x="10" y="0" width="5" height="30" fill="var(--text2)"/></g><text x="250" y="180" text-anchor="middle" font-size="12" font-weight="bold">同源染色体分离!</text>';
-                    break;
-                case 'telophase1':
-                    html = '<circle cx="150" cy="100" r="60" fill="var(--bg2)" stroke="currentColor" stroke-width="3"/><circle cx="350" cy="100" r="60" fill="var(--bg2)" stroke="currentColor" stroke-width="3"/><g transform="translate(125,80)"><rect x="0" y="0" width="5" height="25" fill="currentColor"/><rect x="10" y="0" width="5" height="25" fill="currentColor"/><rect x="25" y="0" width="5" height="25" fill="currentColor"/><rect x="35" y="0" width="5" height="25" fill="currentColor"/></g><g transform="translate(325,80)"><rect x="0" y="0" width="5" height="25" fill="var(--text2)"/><rect x="10" y="0" width="5" height="25" fill="var(--text2)"/><rect x="25" y="0" width="5" height="25" fill="var(--text2)"/><rect x="35" y="0" width="5" height="25" fill="var(--text2)"/></g><text x="250" y="180" text-anchor="middle" font-size="12">两个子细胞</text>';
-                    break;
-                case 'telophase2':
-                    html = '<circle cx="100" cy="80" r="45" fill="var(--bg2)" stroke="currentColor" stroke-width="2"/><circle cx="200" cy="80" r="45" fill="var(--bg2)" stroke="currentColor" stroke-width="2"/><circle cx="300" cy="80" r="45" fill="var(--bg2)" stroke="currentColor" stroke-width="2"/><circle cx="400" cy="80" r="45" fill="var(--bg2)" stroke="currentColor" stroke-width="2"/><rect x="90" y="70" width="4" height="20" fill="currentColor"/><rect x="105" y="70" width="4" height="20" fill="currentColor"/><rect x="190" y="70" width="4" height="20" fill="currentColor"/><rect x="205" y="70" width="4" height="20" fill="currentColor"/><rect x="290" y="70" width="4" height="20" fill="var(--text2)"/><rect x="305" y="70" width="4" height="20" fill="var(--text2)"/><rect x="390" y="70" width="4" height="20" fill="var(--text2)"/><rect x="405" y="70" width="4" height="20" fill="var(--text2)"/><text x="100" y="145" text-anchor="middle" font-size="10">精子1</text><text x="200" y="145" text-anchor="middle" font-size="10">精子2</text><text x="300" y="145" text-anchor="middle" font-size="10">精子3</text><text x="400" y="145" text-anchor="middle" font-size="10">精子4</text><text x="250" y="180" text-anchor="middle" font-size="12" font-weight="bold">4个精子形成!</text>';
-                    break;
-                default:
-                    html = '<circle cx="250" cy="100" r="80" fill="var(--bg2)" stroke="currentColor" stroke-width="3"/><text x="250" y="105" text-anchor="middle" font-size="12">点击按钮查看</text>';
-            }
-            svg.innerHTML = html;
-        }
-
-        // Respiration Tabs
-        function showRespTab(tabId, btn) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            btn.classList.add('active');
-        }
-
-        // Respiration Calculator
+	'interphase': {
+	title:'间期（DNA复制期）',desc:'DNA复制，染色体数目不变，每条染色体形成姐妹染色单体',chr:'2n=4',dna:'4n=8',chromatid:'8'
+}
+,'prophase1': {
+	title:'前期I（联会、四分体）',desc:'同源染色体配对（联会），形成四分体，可能发生交叉互换',chr:'2n=4',dna:'4n=8',chromatid:'8'
+}
+,'metaphase1': {
+	title:'中期I',desc:'四分体排列在赤道板上',chr:'2n=4',dna:'4n=8',chromatid:'8'
+}
+,'anaphase1': {
+	title:'后期I（关键！同源染色体分离）',desc:'同源染色体分离，分别移向细胞两极',chr:'2n=4',dna:'4n=8',chromatid:'8'
+}
+,'telophase1': {
+	title:'末期I',desc:'形成两个子细胞，每个含n条染色体',chr:'n=2',dna:'2n=4',chromatid:'4'
+}
+,'prophase2': {
+	title:'前期II',desc:'与有丝分裂前期类似，注意：没有DNA复制！',chr:'n=2',dna:'2n=4',chromatid:'4'
+}
+,'anaphase2': {
+	title:'后期II（姐妹染色单体分离）',desc:'着丝点分裂，姐妹染色单体分开',chr:'2n=4',dna:'2n=4',chromatid:'0'
+}
+,'telophase2': {
+	title:'末期II',desc:'形成4个子细胞，每个含n条染色体',chr:'n=2',dna:'n=2',chromatid:'0'
+}
+};
+	function showMeiosis(stage,btn) {
+	const data = meiosisData[stage];
+	document.getElementById('meiosisDesc').querySelector('.stage-title').textContent = data.title;
+	document.getElementById('meiosisDesc').querySelector('p').textContent = data.desc;
+	document.getElementById('chrCount').textContent = data.chr;
+	document.getElementById('dnaCount').textContent = data.dna;
+	document.getElementById('chromatidCount').textContent = data.chromatid;
+	document.querySelectorAll('.anim-controls .anim-btn').forEach(b => b.classList.remove('active'));
+	btn.classList.add('active');
+	drawMeiosis(stage);
+}
+function drawMeiosis(stage) {
+	const svg = document.getElementById('meiosisSvg');
+	let html = '';
+	switch(stage) {
+	case 'interphase':html = '<circle cx="250" cy="100" r="80" fill="var(--bg2)" stroke="currentColor" stroke-width="3"/><circle cx="250" cy="100" r="25" fill="var(--bg3)" stroke="currentColor" stroke-width="2"/><text x="250" y="105" text-anchor="middle" font-size="10">核</text><line x1="220" y1="70" x2="235" y2="90" stroke="currentColor" stroke-width="4"/><line x1="260" y1="70" x2="275" y2="90" stroke="currentColor" stroke-width="4"/><line x1="220" y1="110" x2="235" y2="130" stroke="var(--text2)" stroke-width="4"/><line x1="260" y1="110" x2="275" y2="130" stroke="var(--text2)" stroke-width="4"/>';
+	break;
+	case 'prophase1':html = '<circle cx="250" cy="100" r="80" fill="var(--bg2)" stroke="currentColor" stroke-width="3"/><g transform="translate(200,60)"><rect x="0" y="0" width="6" height="40" fill="currentColor"/><rect x="10" y="0" width="6" height="40" fill="currentColor"/><rect x="20" y="0" width="6" height="40" fill="var(--text2)"/><rect x="30" y="0" width="6" height="40" fill="var(--text2)"/></g><g transform="translate(250,90)"><rect x="0" y="0" width="6" height="40" fill="currentColor"/><rect x="10" y="0" width="6" height="40" fill="currentColor"/><rect x="20" y="0" width="6" height="40" fill="var(--text2)"/><rect x="30" y="0" width="6" height="40" fill="var(--text2)"/></g><text x="250" y="180" text-anchor="middle" font-size="12">四分体形成</text>';
+	break;
+	case 'metaphase1':html = '<circle cx="250" cy="100" r="80" fill="var(--bg2)" stroke="currentColor" stroke-width="3"/><line x1="150" y1="100" x2="350" y2="100" stroke="currentColor" stroke-width="2" stroke-dasharray="5,5"/><g transform="translate(200,80)"><rect x="0" y="0" width="5" height="30" fill="currentColor"/><rect x="10" y="0" width="5" height="30" fill="currentColor"/></g><g transform="translate(230,80)"><rect x="0" y="0" width="5" height="30" fill="var(--text2)"/><rect x="10" y="0" width="5" height="30" fill="var(--text2)"/></g><g transform="translate(260,80)"><rect x="0" y="0" width="5" height="30" fill="currentColor"/><rect x="10" y="0" width="5" height="30" fill="currentColor"/></g><g transform="translate(290,80)"><rect x="0" y="0" width="5" height="30" fill="var(--text2)"/><rect x="10" y="0" width="5" height="30" fill="var(--text2)"/></g><text x="250" y="180" text-anchor="middle" font-size="12">四分体排列在赤道板</text>';
+	break;
+	case 'anaphase1':html = '<ellipse cx="250" cy="100" rx="120" ry="80" fill="var(--bg2)" stroke="currentColor" stroke-width="3"/><g transform="translate(140,70)"><rect x="0" y="0" width="5" height="30" fill="currentColor"/><rect x="10" y="0" width="5" height="30" fill="currentColor"/></g><g transform="translate(140,100)"><rect x="0" y="0" width="5" height="30" fill="currentColor"/><rect x="10" y="0" width="5" height="30" fill="currentColor"/></g><g transform="translate(330,70)"><rect x="0" y="0" width="5" height="30" fill="var(--text2)"/><rect x="10" y="0" width="5" height="30" fill="var(--text2)"/></g><g transform="translate(330,100)"><rect x="0" y="0" width="5" height="30" fill="var(--text2)"/><rect x="10" y="0" width="5" height="30" fill="var(--text2)"/></g><text x="250" y="180" text-anchor="middle" font-size="12" font-weight="bold">同源染色体分离!</text>';
+	break;
+	case 'telophase1':html = '<circle cx="150" cy="100" r="60" fill="var(--bg2)" stroke="currentColor" stroke-width="3"/><circle cx="350" cy="100" r="60" fill="var(--bg2)" stroke="currentColor" stroke-width="3"/><g transform="translate(125,80)"><rect x="0" y="0" width="5" height="25" fill="currentColor"/><rect x="10" y="0" width="5" height="25" fill="currentColor"/><rect x="25" y="0" width="5" height="25" fill="currentColor"/><rect x="35" y="0" width="5" height="25" fill="currentColor"/></g><g transform="translate(325,80)"><rect x="0" y="0" width="5" height="25" fill="var(--text2)"/><rect x="10" y="0" width="5" height="25" fill="var(--text2)"/><rect x="25" y="0" width="5" height="25" fill="var(--text2)"/><rect x="35" y="0" width="5" height="25" fill="var(--text2)"/></g><text x="250" y="180" text-anchor="middle" font-size="12">两个子细胞</text>';
+	break;
+	case 'prophase2':html = '<circle cx="150" cy="100" r="60" fill="var(--bg2)" stroke="currentColor" stroke-width="3"/><circle cx="350" cy="100" r="60" fill="var(--bg2)" stroke="currentColor" stroke-width="3"/><g transform="translate(125,80)"><rect x="0" y="0" width="5" height="25" fill="currentColor"/><rect x="10" y="0" width="5" height="25" fill="currentColor"/><rect x="25" y="0" width="5" height="25" fill="currentColor"/><rect x="35" y="0" width="5" height="25" fill="currentColor"/></g><g transform="translate(325,80)"><rect x="0" y="0" width="5" height="25" fill="var(--text2)"/><rect x="10" y="0" width="5" height="25" fill="var(--text2)"/><rect x="25" y="0" width="5" height="25" fill="var(--text2)"/><rect x="35" y="0" width="5" height="25" fill="var(--text2)"/></g><text x="250" y="180" text-anchor="middle" font-size="12">每个细胞准备第二次分裂</text>';
+	break;
+	case 'anaphase2':html = '<ellipse cx="150" cy="100" rx="70" ry="80" fill="var(--bg2)" stroke="currentColor" stroke-width="3"/><ellipse cx="350" cy="100" rx="70" ry="80" fill="var(--bg2)" stroke="currentColor" stroke-width="3"/><g transform="translate(100,70)"><rect x="0" y="0" width="4" height="25" fill="currentColor"/><rect x="20" y="0" width="4" height="25" fill="currentColor"/></g><g transform="translate(100,100)"><rect x="0" y="0" width="4" height="25" fill="currentColor"/><rect x="20" y="0" width="4" height="25" fill="currentColor"/></g><g transform="translate(160,70)"><rect x="0" y="0" width="4" height="25" fill="currentColor"/><rect x="20" y="0" width="4" height="25" fill="currentColor"/></g><g transform="translate(160,100)"><rect x="0" y="0" width="4" height="25" fill="currentColor"/><rect x="20" y="0" width="4" height="25" fill="currentColor"/></g><g transform="translate(300,70)"><rect x="0" y="0" width="4" height="25" fill="var(--text2)"/><rect x="20" y="0" width="4" height="25" fill="var(--text2)"/></g><g transform="translate(300,100)"><rect x="0" y="0" width="4" height="25" fill="var(--text2)"/><rect x="20" y="0" width="4" height="25" fill="var(--text2)"/></g><g transform="translate(360,70)"><rect x="0" y="0" width="4" height="25" fill="var(--text2)"/><rect x="20" y="0" width="4" height="25" fill="var(--text2)"/></g><g transform="translate(360,100)"><rect x="0" y="0" width="4" height="25" fill="var(--text2)"/><rect x="20" y="0" width="4" height="25" fill="var(--text2)"/></g><text x="250" y="180" text-anchor="middle" font-size="12" font-weight="bold">姐妹染色单体分离!</text>';
+	break;
+	case 'telophase2':html = '<circle cx="100" cy="80" r="45" fill="var(--bg2)" stroke="currentColor" stroke-width="2"/><circle cx="200" cy="80" r="45" fill="var(--bg2)" stroke="currentColor" stroke-width="2"/><circle cx="300" cy="80" r="45" fill="var(--bg2)" stroke="currentColor" stroke-width="2"/><circle cx="400" cy="80" r="45" fill="var(--bg2)" stroke="currentColor" stroke-width="2"/><rect x="90" y="70" width="4" height="20" fill="currentColor"/><rect x="105" y="70" width="4" height="20" fill="currentColor"/><rect x="190" y="70" width="4" height="20" fill="currentColor"/><rect x="205" y="70" width="4" height="20" fill="currentColor"/><rect x="290" y="70" width="4" height="20" fill="var(--text2)"/><rect x="305" y="70" width="4" height="20" fill="var(--text2)"/><rect x="390" y="70" width="4" height="20" fill="var(--text2)"/><rect x="405" y="70" width="4" height="20" fill="var(--text2)"/><text x="100" y="145" text-anchor="middle" font-size="10">精子1</text><text x="200" y="145" text-anchor="middle" font-size="10">精子2</text><text x="300" y="145" text-anchor="middle" font-size="10">精子3</text><text x="400" y="145" text-anchor="middle" font-size="10">精子4</text><text x="250" y="180" text-anchor="middle" font-size="12" font-weight="bold">4个精子形成!</text>';
+	break;
+	default:html = '<circle cx="250" cy="100" r="80" fill="var(--bg2)" stroke="currentColor" stroke-width="3"/><text x="250" y="105" text-anchor="middle" font-size="12">点击按钮查看</text>';
+}
+svg.innerHTML = html;}// Respiration Tabs
+        function showRespTab(tabId,btn) {
+	document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+	document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+	document.getElementById(tabId).classList.add('active');
+	btn.classList.add('active');
+}
+// Respiration Calculator
         function updateResp() {
-            const percent = parseInt(document.getElementById('respirationSlider').value);
-            document.getElementById('aerobicPercent').textContent = percent + '%';
-            const aerobic = percent / 100;
-            const anaerobic = 1 - aerobic;
-            const co2 = (aerobic * 6 + anaerobic * 2).toFixed(1);
-            const o2 = (aerobic * 6).toFixed(1);
-            const ratio = o2 > 0 ? (co2 / o2).toFixed(2) : '∞';
-            document.getElementById('co2Output').textContent = co2;
-            document.getElementById('o2Input').textContent = o2;
-            document.getElementById('ratioValue').textContent = ratio;
-            let type, explain;
-            if (percent == 100) { type = '纯有氧呼吸'; explain = '只进行有氧呼吸，CO₂/O₂ = 1'; }
-            else if (percent == 0) { type = '纯无氧呼吸'; explain = '只进行无氧呼吸(酒精发酵)，不消耗O₂'; }
-            else { type = '混合呼吸'; explain = '有' + percent + '%有氧呼吸，' + (100-percent) + '%无氧呼吸'; }
-            document.getElementById('respirationType').textContent = type;
-            document.getElementById('respirationExplain').textContent = explain;
-        }
-
-        // Photosynthesis Simulation
+	const percent = parseInt(document.getElementById('respirationSlider').value);
+	document.getElementById('aerobicPercent').textContent = percent + '%';
+	const aerobic = percent / 100;
+	const anaerobic = 1 - aerobic;
+	const co2 = (aerobic * 6 + anaerobic * 2).toFixed(1);
+	const o2 = (aerobic * 6).toFixed(1);
+	const ratio = o2 > 0 ? (co2 / o2).toFixed(2):'∞';
+	document.getElementById('co2Output').textContent = co2;
+	document.getElementById('o2Input').textContent = o2;
+	document.getElementById('ratioValue').textContent = ratio;
+	let type,explain;
+	if (percent == 100) {
+	type = '纯有氧呼吸';
+	explain = '只进行有氧呼吸，CO₂/O₂ = 1';
+}
+else if (percent == 0) {
+	type = '纯无氧呼吸';
+	explain = '只进行无氧呼吸(酒精发酵)，不消耗O₂';
+}
+else {
+	type = '混合呼吸';
+	explain = '有' + percent + '%有氧呼吸，' + (100-percent) + '%无氧呼吸';
+}
+document.getElementById('respirationType').textContent = type;
+	document.getElementById('respirationExplain').textContent = explain;}// Photosynthesis Simulation
         function updatePhoto() {
-            const light = parseInt(document.getElementById('lightSlider').value);
-            const temp = parseInt(document.getElementById('tempSlider').value);
-            const co2 = parseInt(document.getElementById('co2Slider').value);
-            document.getElementById('lightValue').textContent = light + ' lux';
-            document.getElementById('tempValue').textContent = temp + '°C';
-            document.getElementById('co2Value').textContent = (co2 / 1000).toFixed(3) + '%';
-            let truePhoto = 0, resp = 0;
-            if (light < 1000) truePhoto = light / 100;
-            else if (light < 5000) truePhoto = 10 + (light - 1000) / 400;
-            else truePhoto = 20 + (light - 5000) / 1000;
-            if (temp < 20) resp = 2 + (temp - 5) * 0.2;
-            else if (temp < 35) resp = 5 + (temp - 20) * 0.3;
-            else resp = 10 + (temp - 35) * 0.5;
-            truePhoto *= (0.5 + co2 / 100);
-            if (temp < 15 || temp > 40) truePhoto *= 0.5;
-            else if (temp > 35) truePhoto *= 0.7;
-            if (light == 0) truePhoto = 0;
-            const netPhoto = truePhoto - resp;
-            document.getElementById('truePhotoRate').textContent = truePhoto.toFixed(1);
-            document.getElementById('respRate').textContent = resp.toFixed(1);
-            document.getElementById('netPhotoRate').textContent = netPhoto.toFixed(1);
-            const progress = Math.max(0, Math.min(100, 50 + netPhoto * 2));
-            document.getElementById('organicProgress').style.width = progress + '%';
-            document.getElementById('organicStatus').textContent = netPhoto > 0 ? '积累中 ↑' : (netPhoto < 0 ? '消耗中 ↓' : '平衡');
-        }
-
-        // Fertilization Detail
+	const light = parseInt(document.getElementById('lightSlider').value);
+	const temp = parseInt(document.getElementById('tempSlider').value);
+	const co2 = parseInt(document.getElementById('co2Slider').value);
+	document.getElementById('lightValue').textContent = light + ' lux';
+	document.getElementById('tempValue').textContent = temp + '°C';
+	document.getElementById('co2Value').textContent = (co2 / 1000).toFixed(3) + '%';
+	let truePhoto = 0,resp = 0;
+	if (light < 1000) truePhoto = light / 100;
+	else if (light < 5000) truePhoto = 10 + (light - 1000) / 400;
+	else truePhoto = 20 + (light - 5000) / 1000;
+	if (temp < 20) resp = 2 + (temp - 5) * 0.2;
+	else if (temp < 35) resp = 5 + (temp - 20) * 0.3;
+	else resp = 10 + (temp - 35) * 0.5;
+	truePhoto *= (0.5 + co2 / 100);
+	if (temp < 15 || temp > 40) truePhoto *= 0.5;
+	else if (temp > 35) truePhoto *= 0.7;
+	if (light == 0) truePhoto = 0;
+	const netPhoto = truePhoto - resp;
+	document.getElementById('truePhotoRate').textContent = truePhoto.toFixed(1);
+	document.getElementById('respRate').textContent = resp.toFixed(1);
+	document.getElementById('netPhotoRate').textContent = netPhoto.toFixed(1);
+	const progress = Math.max(0,Math.min(100,50 + netPhoto * 2));
+	document.getElementById('organicProgress').style.width = progress + '%';
+	document.getElementById('organicStatus').textContent = netPhoto > 0 ? '积累中 ↑':(netPhoto < 0 ? '消耗中 ↓':'平衡');
+}
+// Fertilization Detail
         function showFert(type) {
-            const detail = document.getElementById('fertDetail');
-            let html = '';
-            if (type === 'sperm') html = '<div class="stage-title">🔵 精子的特点</div><p>• 体积小，几乎只有细胞核<br>• 含有n条染色体（单倍体）<br>• 有鞭毛，能运动</p>';
-            else if (type === 'egg') html = '<div class="stage-title">⭕ 卵细胞的特点</div><p>• 体积大，含大量营养物质<br>• 含有n条染色体（单倍体）<br>• 不能运动</p>';
-            else html = '<div class="stage-title">🟢 受精卵的特点</div><p>• 含有2n条染色体（二倍体）<br>• 一半来自父方，一半来自母方<br>• 具有发育成完整个体的能力</p>';
-            detail.innerHTML = html;
-        }
-
-        // Drag and Drop
+	const detail = document.getElementById('fertDetail');
+	let html = '';
+	if (type === 'sperm') html = '<div class="stage-title">🔵 精子的特点</div><p>• 体积小，几乎只有细胞核<br>• 含有n条染色体（单倍体）<br>• 有鞭毛，能运动</p>';
+	else if (type === 'egg') html = '<div class="stage-title">⭕ 卵细胞的特点</div><p>• 体积大，含大量营养物质<br>• 含有n条染色体（单倍体）<br>• 不能运动</p>';
+	else html = '<div class="stage-title">🟢 受精卵的特点</div><p>• 含有2n条染色体（二倍体）<br>• 一半来自父方，一半来自母方<br>• 具有发育成完整个体的能力</p>';
+	detail.innerHTML = html;
+}
+// Drag and Drop
         let draggedItem = null;
-        document.querySelectorAll('.drag-item').forEach(item => {
-            item.addEventListener('dragstart', function(e) { draggedItem = this; setTimeout(() => this.style.opacity = '0.5', 0); });
-            item.addEventListener('dragend', function() { this.style.opacity = '1'; });
-        });
-        ['dragSource', 'dragTarget'].forEach(id => {
-            const zone = document.getElementById(id);
-            zone.addEventListener('dragover', function(e) { e.preventDefault(); });
-            zone.addEventListener('drop', function(e) { e.preventDefault(); if (draggedItem) this.appendChild(draggedItem); });
-        });
-
-        function checkDrag() {
-            const items = document.getElementById('dragTarget').querySelectorAll('.drag-item');
-            const order = Array.from(items).map(i => i.getAttribute('data-stage'));
-            const correct = ['间期', '前期I', '中期I', '后期I', '前期II', '末期II'];
-            const result = document.getElementById('dragResult');
-            result.style.display = 'block';
-            let score = 0;
-            for (let i = 0; i < Math.min(order.length, correct.length); i++) { if (order[i] === correct[i]) score++; }
-            if (order.length === correct.length && score === correct.length) {
-                result.style.background = document.body.getAttribute('data-theme') === 'dark' ? '#1b3d1b' : '#e8f5e9';
-                result.innerHTML = '✅ 完全正确！太棒了！';
-            } else {
-                result.style.background = document.body.getAttribute('data-theme') === 'dark' ? '#3d2d1b' : '#fff3e0';
-                result.innerHTML = '❌ 正确顺序：间期→前期I→中期I→后期I→前期II→末期II<br>你对了 ' + score + '/' + correct.length;
-            }
-        }
-
-        function resetDrag() {
-            document.querySelectorAll('.drag-item').forEach(item => document.getElementById('dragSource').appendChild(item));
-            document.getElementById('dragResult').style.display = 'none';
-        }
-
-        // Initialize
+	document.querySelectorAll('.drag-item').forEach(item => {
+	item.addEventListener('dragstart',function(e) {
+	draggedItem = this;
+	setTimeout(() => this.style.opacity = '0.5',0);
+}
+);
+	item.addEventListener('dragend',function() {
+	this.style.opacity = '1';
+}
+);});
+	['dragSource','dragTarget'].forEach(id => {
+	const zone = document.getElementById(id);
+	zone.addEventListener('dragover',function(e) {
+	e.preventDefault();
+}
+);
+	zone.addEventListener('drop',function(e) {
+	e.preventDefault();
+	if (draggedItem) this.appendChild(draggedItem);
+}
+);});
+	function checkDrag() {
+	const items = document.getElementById('dragTarget').querySelectorAll('.drag-item');
+	const order = Array.from(items).map(i => i.getAttribute('data-stage'));
+	const correct = ['间期','前期I','中期I','后期I','前期II','末期II'];
+	const result = document.getElementById('dragResult');
+	result.style.display = 'block';
+	let score = 0;
+	for (let i = 0;
+	i < Math.min(order.length,correct.length);
+	i++) {
+	if (order[i] === correct[i]) score++;
+}
+if (order.length === correct.length && score === correct.length) {
+	result.style.background = document.body.getAttribute('data-theme') === 'dark' ? '#1b3d1b':'#e8f5e9';
+	result.innerHTML = '✅ 完全正确！太棒了！';
+}
+else {
+	result.style.background = document.body.getAttribute('data-theme') === 'dark' ? '#3d2d1b':'#fff3e0';
+	result.innerHTML = '❌ 正确顺序：间期→前期I→中期I→后期I→前期II→末期II<br>你对了 ' + score + '/' + correct.length;
+}
+}function resetDrag() {
+	document.querySelectorAll('.drag-item').forEach(item => document.getElementById('dragSource').appendChild(item));
+	document.getElementById('dragResult').style.display = 'none';
+}
+// Initialize
         drawMeiosis('interphase');
-        updateResp();
-        updatePhoto();
-    </script>
+	updateResp();
+	updatePhoto();
+	</script>
      <style>
         /* Footer */
         .footer {
-            text-align: center;
-            padding: 3rem 2rem 2rem;
-            color: #666;
-            font-size: 0.9rem;
-            border-top: 1px solid #ddd;
-            margin-top: 4rem;
-            background: #fff;
-        }
-
-        .footer-text {
-            font-style: italic;
-        }
-    </style>
+	text-align:center;
+	padding:3rem 2rem 2rem;
+	color:#666;
+	font-size:0.9rem;
+	border-top:1px solid #ddd;
+	margin-top:4rem;
+	background:#fff;
+}
+.footer-text {
+	font-style:italic;
+}
+</style>
 
 
 
